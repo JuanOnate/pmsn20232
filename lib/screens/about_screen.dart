@@ -22,18 +22,18 @@ class Home extends StatelessWidget{
       title: "ITCelaya", 
       subtitle: "La mejor institución", 
       image: const AssetImage("assets/images/img-1.png"), 
-      backgroundColor: const Color.fromARGB(255, 71, 220, 124), 
-      titleColor: const Color.fromARGB(255, 220, 71, 168), 
-      subtitleColor: const Color.fromARGB(255, 220, 71, 168),
+      backgroundColor: const Color.fromARGB(255, 252, 238, 145), 
+      titleColor: const Color.fromARGB(255, 42, 183, 66), 
+      subtitleColor: const Color.fromARGB(255, 42, 183, 66),
       fondo: LottieBuilder.asset("assets/animation/animation-1.json")
       ),
     CardITCData(
       title: "Ingeniería en Sistemas Computacionales", 
       subtitle: "La mejor carrera", 
       image: const AssetImage("assets/images/img-2.png"), 
-      backgroundColor: const Color.fromARGB(255, 209, 220, 71), 
-      titleColor: const Color.fromARGB(255, 81, 71, 220), 
-      subtitleColor: const Color.fromARGB(255, 81, 71, 220),
+      backgroundColor: const Color.fromARGB(255, 129, 147, 207), 
+      titleColor: const Color.fromARGB(255, 207, 91, 56), 
+      subtitleColor: const Color.fromARGB(255, 207, 91, 56),
       fondo: LottieBuilder.asset("assets/animation/animation-1.json")
       ),
     CardITCData(
