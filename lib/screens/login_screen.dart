@@ -34,15 +34,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final imgLogo = Container( //las imagenes de fondo se haecn con un container, estos equivalen a un DIV de web
-      width: 300,
+      width: 200,
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage('https://es.wikipedia.org/static/images/icons/wikipedia.png')
+          image: NetworkImage('https://cdn141.picsart.com/284257859018211.png')
         )
       ),
     );
 
    final btnEntrar = FloatingActionButton.extended(
+    backgroundColor: Color.fromARGB(255, 167, 70, 86),
     icon: Icon(Icons.login),
     label: Text('Entrar'),
     onPressed: () => Navigator.pushNamed(context, '/dash')
@@ -54,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: NetworkImage('https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/bltead8266c9bd9f7c8/64e7a41314f0616acbb3c568/Briar-Splash-abilities-rundown-article.jpg')
+            image: NetworkImage('https://i.pinimg.com/564x/6e/95/8c/6e958cdf594e661a91b6f50979221269.jpg')
           )
         ),
         child: Padding(
@@ -68,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 30),
                 //color: Colors.grey,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: const Color.fromARGB(100, 167, 70, 86),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
