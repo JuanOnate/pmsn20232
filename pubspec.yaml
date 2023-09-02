@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
+  concentric_transition: ^1.0.3
   flutter:
     sdk: flutter
 
