@@ -1,5 +1,6 @@
 import 'package:concentric_transition/concentric_transition.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pmsn20232/screens/card_itc.dart';
 
 class AboutITC extends StatelessWidget {
@@ -7,37 +8,43 @@ class AboutITC extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       home: Home(),
     );
   }
 }
 
 class Home extends StatelessWidget{
-  const Home({super.key});
+   Home({super.key});
   
-  final data = const [
+  final data =  [
     CardITCData(
       title: "ITCelaya", 
       subtitle: "La mejor institución", 
-      image: AssetImage("assets/images/img-1.png"), 
-      backgroundColor:  Color.fromARGB(255, 71, 220, 124), 
-      titleColor: Color.fromARGB(255, 220, 71, 168), 
-      subtitleColor: Color.fromARGB(255, 220, 71, 168)),
+      image: const AssetImage("assets/images/img-1.png"), 
+      backgroundColor: const Color.fromARGB(255, 71, 220, 124), 
+      titleColor: const Color.fromARGB(255, 220, 71, 168), 
+      subtitleColor: const Color.fromARGB(255, 220, 71, 168),
+      fondo: LottieBuilder.asset("assets/animation/animation-1.json")
+      ),
     CardITCData(
       title: "Ingeniería en Sistemas Computacionales", 
       subtitle: "La mejor carrera", 
-      image: AssetImage("assets/images/img-2.png"), 
-      backgroundColor:  Color.fromARGB(255, 209, 220, 71), 
-      titleColor:  Color.fromARGB(255, 81, 71, 220), 
-      subtitleColor:  Color.fromARGB(255, 81, 71, 220)),
+      image: const AssetImage("assets/images/img-2.png"), 
+      backgroundColor: const Color.fromARGB(255, 209, 220, 71), 
+      titleColor: const Color.fromARGB(255, 81, 71, 220), 
+      subtitleColor: const Color.fromARGB(255, 81, 71, 220),
+      fondo: LottieBuilder.asset("assets/animation/animation-1.json")
+      ),
     CardITCData(
       title: "Instalaciones", 
       subtitle: "Las mejores de Celaya", 
-      image: AssetImage("assets/images/img-3.png"), 
-      backgroundColor:  Color.fromARGB(255, 220, 103, 71), 
-      titleColor:  Color.fromARGB(255, 71, 188, 220), 
-      subtitleColor:  Color.fromARGB(255, 71, 188, 220))
+      image: const AssetImage("assets/images/img-3.png"), 
+      backgroundColor: const  Color.fromARGB(255, 220, 103, 71), 
+      titleColor: const Color.fromARGB(255, 71, 188, 220), 
+      subtitleColor: const Color.fromARGB(255, 71, 188, 220),
+      fondo: LottieBuilder.asset("assets/animation/animation-1.json")
+      ),
   ];
 
   @override
