@@ -9,11 +9,11 @@ class DashboardScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Bienvenido :)'),
       ),
-      drawer: createDrawer(),
+      drawer: createDrawer(context),
     );
   }
 
-  Widget createDrawer(){
+  Widget createDrawer(context){
     return Drawer(
       child: ListView(
         children: [
@@ -43,11 +43,12 @@ class DashboardScreen extends StatelessWidget {
             trailing: Icon(Icons.chevron_right),
             title: Text('Institución'),
             subtitle: Text('Acerca de'),
-            onTap: (){},
+            onTap: (){
+              Navigator.pushNamed(context, '/about');
+            },
           )
         ],
       ),
     );
   }
-
 }

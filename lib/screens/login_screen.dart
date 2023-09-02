@@ -43,9 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
    final btnEntrar = FloatingActionButton.extended(
-    backgroundColor: Color.fromARGB(255, 167, 70, 86),
-    icon: Icon(Icons.login),
-    label: Text('Entrar'),
+    backgroundColor: const Color.fromARGB(255, 167, 70, 86),
+    icon: const Icon(Icons.login),
+    label: const Text('Entrar'),
     onPressed: () => Navigator.pushNamed(context, '/dash')
     );
 
