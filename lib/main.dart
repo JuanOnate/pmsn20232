@@ -92,7 +92,9 @@ class MyApp extends StatelessWidget{
           home: const LoginScreen(),
           routes: getRoutes(),
           //theme: ThemeData.dark(),
-          theme: StylesApp.darkTheme(context)
+          theme: value 
+            ? StylesApp.darkTheme(context)
+            : StylesApp.lightTheme(context)
         );
       }
     );
