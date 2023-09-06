@@ -73,6 +73,7 @@ class MainApp extends StatelessWidget {
 */
 
 import 'package:flutter/material.dart';
+import 'package:pmsn20232/assets/global_values.dart';
 import 'package:pmsn20232/assets/styles_app.dart';
 import 'package:pmsn20232/routes.dart';
 import 'package:pmsn20232/screens/login_screen.dart';
@@ -84,11 +85,16 @@ class MyApp extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const LoginScreen(),
-      routes: getRoutes(),
-      //theme: ThemeData.dark(),
-      theme: StylesApp.darkTheme(context)
+    return ValueListenableBuilder(
+      valueListenable: GlobalValues.flagTheme,
+      builder: (context, value, _) {
+        return MaterialApp(
+          home: const LoginScreen(),
+          routes: getRoutes(),
+          //theme: ThemeData.dark(),
+          theme: StylesApp.darkTheme(context)
+        );
+      }
     );
   }
 }

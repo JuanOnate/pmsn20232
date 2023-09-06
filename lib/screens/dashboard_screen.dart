@@ -1,9 +1,14 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   DashboardScreen({super.key});
 
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
   bool isDarkModeEnabled = true;
 
   @override
@@ -47,5 +52,4 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
-
 }
