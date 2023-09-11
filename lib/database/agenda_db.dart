@@ -31,4 +31,25 @@ class AgendaDB {
                                               estadoTarea BYTE)''';
     db.execute(query);
   }
+
+  Future<int> INSERT(String tblName, Map<String,dynamic> data) async{
+    var conexion = await database;
+    return conexion!.insert(tblName, data);
+  }
+
+  Future<int> UPDATE(String tblName, Map<String,dynamic> data) async{
+    var conexion = await database;
+    return conexion!.update(tblName, data, where: 'idTarea = ?', whereArgs: [data['idTarea']]);
+  }
+
+  Future<int> DELETE(String tblName, int idTarea) async{
+    var conexion = await database;
+    return conexion!.delete(tblName, where: 'idTarea = ?', whereArgs: [idTarea]);
+  }
+
+  Future<List<?>> GETALLTAREAS() async{
+    var conexion = await database;
+    var result = conexion!.query('tblName');
+
+  }
 }
