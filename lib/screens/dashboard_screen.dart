@@ -41,9 +41,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             subtitle: Text('Carrusel'),
             onTap: (){},
           ),
+          ListTile(
+            leading: Icon(Icons.task_alt_outlined),
+            trailing: Icon(Icons.chevron_right),
+            title: Text('Admin de tareas'),
+            onTap: () => Navigator.pushNamed(context, '/tarea'),
+          ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
-            child: DayNightSwitcher(
+            child: DayNightSwitcher(    
               isDarkModeEnabled: GlobalValues.flagTheme.value,
               onStateChanged: (isDarkModeEnabled) {
                 GlobalValues.flagTheme.value = isDarkModeEnabled;

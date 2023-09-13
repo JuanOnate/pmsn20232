@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pmsn20232/models/tarea_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AgendaDB {
@@ -25,10 +26,10 @@ class AgendaDB {
   }
 
   FutureOr<void> _createTables(Database db, int version) {
-    String query = ''' CREATE TABLE tblTareas(idTarea INTEGER PRIMARY KEY, 
+    String query = '''CREATE TABLE tblTareas(idTarea INTEGER PRIMARY KEY, 
                                               nombreTarea VARCHAR(50), 
                                               descTarea VARCHAR(50), 
-                                              estadoTarea BYTE)''';
+                                              estadoTarea BYTE);''';
     db.execute(query);
   }
 
@@ -47,9 +48,9 @@ class AgendaDB {
     return conexion!.delete(tblName, where: 'idTarea = ?', whereArgs: [idTarea]);
   }
 
-  Future<List<?>> GETALLTAREAS() async{
+  Future<List<TareaModel>> GETALLTAREAS() async{
     var conexion = await database;
-    var result = conexion!.query('tblName');
-
+    var result = await conexion!.query('tblTareas');
+    return result.map((task)=>TareaModel.fromMap(task)).toList();
   }
 }
