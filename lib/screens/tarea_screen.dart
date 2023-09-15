@@ -23,11 +23,11 @@ class _TareaScreenState extends State<TareaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin de Tareas'),
+        title: const Text('Admin de Tareas'),
         actions: [
           IconButton(
             onPressed: (){}, 
-            icon: Icon(Icons.task))
+            icon: const Icon(Icons.task))
         ],
       ),
       body: FutureBuilder(
@@ -38,7 +38,7 @@ class _TareaScreenState extends State<TareaScreen> {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, index){
-                return Text('Hoa');
+                return const Text('Hola');
               });
           }else{
             if(snapshot.hasError){
