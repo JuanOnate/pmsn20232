@@ -52,6 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: DayNightSwitcher(    
               isDarkModeEnabled: GlobalValues.flagTheme.value,
               onStateChanged: (isDarkModeEnabled) {
+                GlobalValues.prefs.setBool('tema', isDarkModeEnabled);
                 GlobalValues.flagTheme.value = isDarkModeEnabled;
               },
             ),
