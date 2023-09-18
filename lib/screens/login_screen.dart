@@ -3,6 +3,7 @@
 //luego mostrará un error que se soluciona haciendo el import de 'material.dart' con ctrl + .
 
 import 'package:flutter/material.dart';
+import 'package:pmsn20232/assets/global_values.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +13,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  bool sesion = false;
+
   @override
   Widget build(BuildContext context) {
 
@@ -46,6 +50,15 @@ class _LoginScreenState extends State<LoginScreen> {
     icon: Icon(Icons.login),
     label: Text('Entrar'),
     onPressed: () => Navigator.pushNamed(context, '/dash')
+    );
+
+    final cbSesion = Checkbox(
+      value: GlobalValues.prefsSesion.getBool('cbSesion') ?? false, 
+      onChanged: (bool? value){
+        setState(() {
+          GlobalValues.prefsSesion.setBool('cbSesion', value!);
+        });
+      }
     );
 
     return Scaffold( //si la pantalla de la app se muestra en negro es porque no está un Scaffold
@@ -84,8 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: btnEntrar, //para el body se trabaja con stack, poner elementos arriba de otros, el inicial va hasta abajo
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          btnEntrar,
+          cbSesion,
+          const Text('Stay logged in'),
+        ],
+      ),
+      //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      //floatingActionButton: btnEntrar, //para el body se trabaja con stack, poner elementos arriba de otros, el inicial va hasta abajo
     );
   }
 }

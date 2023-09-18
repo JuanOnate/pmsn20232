@@ -76,6 +76,7 @@ import 'package:flutter/material.dart';
 import 'package:pmsn20232/assets/global_values.dart';
 import 'package:pmsn20232/assets/styles_app.dart';
 import 'package:pmsn20232/routes.dart';
+import 'package:pmsn20232/screens/dashboard_screen.dart';
 import 'package:pmsn20232/screens/login_screen.dart';
 
 void main() async {
@@ -89,12 +90,14 @@ class MyApp extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
-    GlobalValues.flagTheme.value = GlobalValues.prefs.getBool('tema') ?? false;
+    GlobalValues.flagTheme.value = GlobalValues.prefsTema.getBool('tema') ?? false;
     return ValueListenableBuilder(
       valueListenable: GlobalValues.flagTheme,
       builder: (context, value, _) {
         return MaterialApp(
-          home: const LoginScreen(),
+          home: GlobalValues.prefsSesion.getBool('cbSesion') ?? false
+            ? DashboardScreen()
+            : const LoginScreen(),
           routes: getRoutes(),
           //theme: ThemeData.dark(),
           theme: value 

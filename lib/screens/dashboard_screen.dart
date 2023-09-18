@@ -52,10 +52,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: DayNightSwitcher(    
               isDarkModeEnabled: GlobalValues.flagTheme.value,
               onStateChanged: (isDarkModeEnabled) {
-                GlobalValues.prefs.setBool('tema', isDarkModeEnabled);
+                GlobalValues.prefsTema.setBool('tema', isDarkModeEnabled);
                 GlobalValues.flagTheme.value = isDarkModeEnabled;
               },
             ),
+          ),
+          ListTile(
+            leading: Icon(Icons.login_outlined),
+            trailing: Icon(Icons.chevron_right),
+            title: Text('Cerrar sesión'),
+            onTap: () {
+              GlobalValues.prefsSesion.setBool('cbSesion', false);
+              Navigator.pushNamed(context, '/login');
+            }
           ),
         ],
       ),
