@@ -13,9 +13,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
-  bool sesion = false;
-
   @override
   Widget build(BuildContext context) {
 
