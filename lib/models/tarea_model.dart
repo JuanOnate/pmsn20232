@@ -2,7 +2,7 @@ class TareaModel {
   int? idTarea;
   String? nombreTarea;
   String? descTarea;
-  bool? estadoTarea;
+  String? estadoTarea;
 
   TareaModel({this.idTarea,this.nombreTarea,this.descTarea,this.estadoTarea});
 

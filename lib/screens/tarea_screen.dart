@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pmsn20232/database/agenda_db.dart';
 import 'package:pmsn20232/models/tarea_model.dart';
+import 'package:pmsn20232/widgets/CardTaskWidget.dart';
 
 class TareaScreen extends StatefulWidget {
   const TareaScreen({super.key});
@@ -26,8 +27,11 @@ class _TareaScreenState extends State<TareaScreen> {
         title: const Text('Admin de Tareas'),
         actions: [
           IconButton(
-            onPressed: (){}, 
-            icon: const Icon(Icons.task))
+            onPressed: ()=>Navigator.pushNamed(context, '/add').then((value){
+              setState((){});
+            }
+          ), 
+          icon: const Icon(Icons.task))
         ],
       ),
       body: FutureBuilder(
@@ -38,8 +42,9 @@ class _TareaScreenState extends State<TareaScreen> {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, index){
-                return const Text('Hola');
-              });
+                return CardTaskWidget(taskModel: snapshot.data![index]);
+              }
+            );
           }else{
             if(snapshot.hasError){
               return const Center(
