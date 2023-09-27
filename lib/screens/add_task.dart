@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pmsn20232/database/agenda_db.dart';
+import 'package:pmsn20232/models/tarea_model.dart';
 
 class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+  AddTask({super.key, this.tareaModel});
+
+  TareaModel? tareaModel;
 
   @override
   State<AddTask> createState() => _AddTaskState();
 }
 
 class _AddTaskState extends State<AddTask> {
-  String dropDownValue = "Pendiente";
+  String? dropDownValue = "Pendiente";
   TextEditingController txtConName = TextEditingController();
   TextEditingController txtConDsc = TextEditingController();
   List<String> dropDownValues = [
@@ -24,6 +27,15 @@ class _AddTaskState extends State<AddTask> {
   void initState(){
     super.initState();
     agendaDB = AgendaDB();
+    if(widget.tareaModel != null){
+      txtConName.text = widget.tareaModel!.nombreTarea!;
+      txtConDsc.text = widget.tareaModel!.descTarea!;
+      switch(widget.tareaModel!.estadoTarea){
+        case 'E': dropDownValue = "En proceso"; break;
+        case 'C': dropDownValue = "Completo"; break;
+        case 'P': dropDownValue = "Pendiente";
+      }
+    }
   }
 
   @override
@@ -69,7 +81,7 @@ class _AddTaskState extends State<AddTask> {
           agendaDB!.INSERT('tblTareas', {
             'nombreTarea' : txtConName.text,
             'descTarea' : txtConDsc.text,
-            'estadoTarea' : dropDownValue.substring(1,1)
+            'estadoTarea' : dropDownValue!.substring(0,1)
           }).then((value) {
             var msj = (value > 0 )
             ? 'La insersión fue exitosa'
@@ -84,7 +96,9 @@ class _AddTaskState extends State<AddTask> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agregar Tarea'),
+        title: widget.tareaModel == null
+          ? Text('Agregar tarea')
+          : Text('Actualizar tarea'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

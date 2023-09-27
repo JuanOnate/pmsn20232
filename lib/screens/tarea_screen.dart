@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pmsn20232/assets/global_values.dart';
 import 'package:pmsn20232/database/agenda_db.dart';
 import 'package:pmsn20232/models/tarea_model.dart';
 import 'package:pmsn20232/widgets/CardTaskWidget.dart';
@@ -30,32 +31,62 @@ class _TareaScreenState extends State<TareaScreen> {
             onPressed: ()=>Navigator.pushNamed(context, '/add').then((value){
               setState((){});
             }
-          ), 
-          icon: const Icon(Icons.task))
+            ), 
+            icon: const Icon(Icons.task)
+          )
         ],
       ),
-      body: FutureBuilder(
-        future: agendaDB!.GETALLTAREAS(), 
-        builder: (BuildContext context,
-        AsyncSnapshot<List<TareaModel>> snapshot){
-          if(snapshot.hasData){
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (BuildContext context, index){
-                return CardTaskWidget(taskModel: snapshot.data![index]);
+      body: ValueListenableBuilder(
+        valueListenable: GlobalValues.flagTask,
+        builder: (context, value, _){
+          return FutureBuilder(
+            future: agendaDB!.GETALLTAREAS(), 
+            builder: (BuildContext context, AsyncSnapshot<List<TareaModel>> snapshot){
+              if(snapshot.hasData){
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return CardTaskWidget(
+                      taskModel: snapshot.data![index],
+                      agendaDB: agendaDB,
+                    );
+                  },
+                );
+              }else{
+                if(snapshot.hasError){
+                  return const Center(
+                    child: Text('Error!'),
+                  );
+                }else{
+                  return CircularProgressIndicator();
+                }
               }
-            );
-          }else{
-            if(snapshot.hasError){
-              return const Center(
-                child: Text('Algo malió sal!'),
-              );
-            }else{
-              return CircularProgressIndicator();
             }
-          }
-        }
+          );
+        },
       ),
+      // body: FutureBuilder(
+      //   future: agendaDB!.GETALLTAREAS(), 
+      //   builder: (BuildContext context,
+      //   AsyncSnapshot<List<TareaModel>> snapshot){
+      //     if(snapshot.hasData){
+      //       return ListView.builder(
+      //         itemCount: snapshot.data!.length,
+      //         itemBuilder: (BuildContext context, index){
+      //           return CardTaskWidget(taskModel: snapshot.data![index]);
+      //         }
+      //       );
+      //     }else{
+      //       if(snapshot.hasError){
+      //         return const Center(
+      //           child: Text('Algo malió sal!'),
+      //         );
+      //       }else{
+      //         return CircularProgressIndicator();
+      //       }
+      //     }
+      //   }
+      // ),
     );
   }
 }
