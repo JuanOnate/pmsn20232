@@ -45,7 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             leading: Icon(Icons.task_alt_outlined),
             trailing: Icon(Icons.chevron_right),
             title: Text('Admin de tareas'),
-            onTap: () => Navigator.pushNamed(context, '/tarea'),
+            onTap: () => Navigator.pushNamed(context, '/popular'),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
