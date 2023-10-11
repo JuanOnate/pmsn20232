@@ -45,6 +45,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             leading: Icon(Icons.task_alt_outlined),
             trailing: Icon(Icons.chevron_right),
             title: Text('Admin de tareas'),
+            onTap: () => Navigator.pushNamed(context, '/tarea'),
+          ),
+          ListTile(
+            leading: Icon(Icons.task_alt_outlined),
+            trailing: Icon(Icons.chevron_right),
+            title: Text('Movies'),
             onTap: () => Navigator.pushNamed(context, '/popular'),
           ),
           Padding(
