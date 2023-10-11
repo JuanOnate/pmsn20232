@@ -29,7 +29,22 @@ class AgendaDB {
     String query = '''CREATE TABLE tblTareas(idTarea INTEGER PRIMARY KEY, 
                                               nombreTarea VARCHAR(50), 
                                               descTarea VARCHAR(50), 
-                                              estadoTarea BYTE);''';
+                                              estadoTarea BYTE);
+                      CREATE TABLE tblCarrera(idCarrera INTEGER PRIMARY KEY,
+                                              nomCarrera VARCHAR(50));
+                      CREATE TABLE tblProfesor(idProfe INTEGER PRIMARY KEY,
+                                               nomProfe VARCHAR(80),
+                                               email VARCHAR(50),
+                                               idCarrera INTEGER,
+                                               foreign key(idCarrera) REFERENCES tblCarrera(idCarrera));
+                      CREATE TABLE tblTask(idTask INTEGER PRIMARY KEY,
+                                           nomTask VARCHAR(100),
+                                           fecExpiracion DATETIME,
+                                           fecRecordatorio DATETIME,
+                                           desTask TEXT,
+                                           realizada INTEGER,
+                                           idProfe INTEGER,
+                                           foreign key(idProfe) REFERENCES tblProfe(idProfe))''';
     db.execute(query);
   }
 
