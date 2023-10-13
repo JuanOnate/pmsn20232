@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pmsn20232/models/carrera_model.dart';
+import 'package:pmsn20232/models/profe_model.dart';
 import 'package:pmsn20232/models/tarea_model.dart';
+import 'package:pmsn20232/models/task_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AgendaDB {
   static final nameDB = 'AGENDADB';
-  static final versionDB = 1;
+  static final versionDB = 2;
 
   static Database? _database;
   Future <Database?> get database async {
@@ -48,6 +51,7 @@ class AgendaDB {
     db.execute(query);
   }
 
+  //CRUD tblTareas
   Future<int> INSERT(String tblName, Map<String,dynamic> data) async{
     var conexion = await database;
     return conexion!.insert(tblName, data);
@@ -67,5 +71,59 @@ class AgendaDB {
     var conexion = await database;
     var result = await conexion!.query('tblTareas');
     return result.map((task)=>TareaModel.fromMap(task)).toList();
+  }
+
+  //CRUD tblCarrera
+
+  Future<int> UPDATE_CARRERA(String tblName, Map<String,dynamic> data) async{
+    var conexion = await database;
+    return conexion!.update(tblName, data, where: 'idCarrera = ?', whereArgs: [data['idCarrera']]);
+  }
+
+  Future<int> DELETE_CARRERA(String tblName, int idCarrera) async{
+    var conexion = await database;
+    return conexion!.delete(tblName, where: 'idCarrera = ?', whereArgs: [idCarrera]);
+  }
+
+  Future<List<CarreraModel>> GETALLCARRERAS() async{
+    var conexion = await database;
+    var result = await conexion!.query('tblCarrera');
+    return result.map((carrera)=>CarreraModel.fromMap(carrera)).toList();
+  }
+
+  //CRUD tblProfesor
+
+  Future<int> UPDATE_PROFESOR(String tblName, Map<String,dynamic> data) async{
+    var conexion = await database;
+    return conexion!.update(tblName, data, where: 'idProfe = ?', whereArgs: [data['idProfe']]);
+  }
+
+  Future<int> DELETE_PROFESOR(String tblName, int idProfe) async{
+    var conexion = await database;
+    return conexion!.delete(tblName, where: 'idProfe = ?', whereArgs: [idProfe]);
+  }
+
+  Future<List<ProfeModel>> GETALLPROFESORES() async{
+    var conexion = await database;
+    var result = await conexion!.query('tblProfesor');
+    return result.map((profe)=>ProfeModel.fromMap(profe)).toList();
+  }
+
+  //CRUD tblTask
+
+  Future<int> UPDATE_TASK(String tblName, Map<String,dynamic> data) async{
+    var conexion = await database;
+    return conexion!.update(tblName, data, where: 'idTask = ?', whereArgs: [data['idTask']]);
+  }
+
+  Future<int> DELETE_TASK(String tblName, int idTask) async{
+    var conexion = await database;
+    return conexion!.delete(tblName, where: 'idTask = ?', whereArgs: [idTask]);
+  }
+
+  Future<List<TaskModel>> GETALLTASKS() async{
+    var conexion = await database;
+    var result = await conexion!.query('tblTask');
+    return result.map((tasks)=>TaskModel.fromMap(tasks)).toList();
   }
 }
