@@ -53,6 +53,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             title: Text('Movies'),
             onTap: () => Navigator.pushNamed(context, '/popular'),
           ),
+          ListTile(
+            leading: Icon(Icons.task_alt_outlined),
+            trailing: Icon(Icons.chevron_right),
+            title: Text('Tareas Profe'),
+            onTap: () => Navigator.pushNamed(context, '/pr4'),
+          ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: DayNightSwitcher(    
