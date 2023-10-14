@@ -1,8 +1,8 @@
 class TaskModel {
   int? idTask;
   String? nomTask;
-  String? fecExpiracion;
-  String? fecRecordatorio;
+  DateTime? fecExpiracion;
+  DateTime? fecRecordatorio;
   String? desTask;
   int? realizada;
   int? idProfe;

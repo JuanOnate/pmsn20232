@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pmsn20232/assets/global_values.dart';
 import 'package:pmsn20232/database/agenda_db.dart';
 import 'package:pmsn20232/models/task_model.dart';
+import 'package:pmsn20232/screens/pr4_add_task.dart';
 
 class PR4CardTaskWidget extends StatelessWidget {
   PR4CardTaskWidget(
@@ -35,7 +37,7 @@ class PR4CardTaskWidget extends StatelessWidget {
                 onTap: ()=> Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddTask(tareaModel: taskModel)
+                    builder: (context) => PR4AddTask(task: taskModel)
                   )
                 ),
                 child: Image.asset('assets/icon_orange.png', height:50),
@@ -51,9 +53,9 @@ class PR4CardTaskWidget extends StatelessWidget {
                         actions: [
                           TextButton(
                             onPressed: (){
-                              agendaDB!.DELETE('tblTareas', taskModel.idTarea!).then((value){
+                              agendaDB!.DELETE4('tblTask', 'idTask', taskModel.idTask!).then((value){
                                 Navigator.pop(context);
-                                GlobalValues.flagTask.value = !GlobalValues.flagTask.value;
+                                GlobalValues.flagPR4Task.value = !GlobalValues.flagPR4Task.value;
                               });
                             }, 
                             child: Text('Si')

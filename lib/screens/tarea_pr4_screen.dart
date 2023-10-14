@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pmsn20232/assets/global_values.dart';
 import 'package:pmsn20232/database/agenda_db.dart';
 import 'package:pmsn20232/models/task_model.dart';
+import 'package:pmsn20232/widgets/PR4CardTaskWidget.dart';
 
 class TareaPR4Screen extends StatefulWidget {
   const TareaPR4Screen({super.key});
@@ -25,10 +26,10 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin de Tareas'),
+        title: const Text('Admin de Tareas PR4'),
         actions: [
           IconButton(
-            onPressed: ()=>Navigator.pushNamed(context, '/addPR4Task').then((value){setState((){});}), 
+            onPressed: ()=>Navigator.pushNamed(context, '/addTask').then((value){setState((){});}), 
             icon: const Icon(Icons.task)
           ),
           IconButton(
@@ -51,7 +52,7 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index){
-                    return CardTaskWidget(
+                    return PR4CardTaskWidget(
                       taskModel: snapshot.data![index],
                       agendaDB: agendaDB,
                     );
