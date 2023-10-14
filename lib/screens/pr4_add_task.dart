@@ -14,11 +14,13 @@ class PR4AddTask extends StatefulWidget {
 class _PR4AddTaskState extends State<PR4AddTask> {
   String? dropDownValue = "Pendiente";
   TextEditingController txtConName = TextEditingController();
+  TextEditingController txtFecExp = TextEditingController();
+  TextEditingController txtFecRec = TextEditingController();
   TextEditingController txtConDsc = TextEditingController();
+
   List<String> dropDownValues = [
     'Pendiente',
-    'Completado',
-    'En proceso'
+    'Realizada'
   ];
 
   AgendaDB? agendaDB;
@@ -28,12 +30,11 @@ class _PR4AddTaskState extends State<PR4AddTask> {
     super.initState();
     agendaDB = AgendaDB();
     if(widget.taskModel != null){
-      txtConName.text = widget.taskModel!.nombreTarea!;
-      txtConDsc.text = widget.taskModel!.descTarea!;
-      switch(widget.taskModel!.estadoTarea){
-        case 'E': dropDownValue = "En proceso"; break;
-        case 'C': dropDownValue = "Completo"; break;
-        case 'P': dropDownValue = "Pendiente";
+      txtConName.text = widget.taskModel!.nomTask!;
+      txtConDsc.text = widget.taskModel!.desTask!;
+      switch(widget.taskModel!.realizada){
+        case 1: dropDownValue = "Realizada"; break;
+        case 0: dropDownValue = "Pendiente"; break;
       }
     }
   }
