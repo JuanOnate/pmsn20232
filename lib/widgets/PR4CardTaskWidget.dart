@@ -37,7 +37,7 @@ class PR4CardTaskWidget extends StatelessWidget {
                 onTap: ()=> Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PR4AddTask(task: taskModel)
+                    builder: (context) => PR4AddTask(taskModel: taskModel)
                   )
                 ),
                 child: Image.asset('assets/icon_orange.png', height:50),

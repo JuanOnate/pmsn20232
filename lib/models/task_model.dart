@@ -13,8 +13,8 @@ class TaskModel {
     return TaskModel(
       idTask: map['idTask'],
       nomTask: map['nomTask'],
-      fecExpiracion: map['fecExpiracion'],
-      fecRecordatorio: map['fecRecordatorio'],
+      fecExpiracion: DateTime.tryParse(map['fecExpiracion'] as String),
+      fecRecordatorio:DateTime.tryParse(map['fecRecordatorio'] as String),
       desTask: map['desTask'],
       realizada: map['realizada'],
       idProfe: map['idProfe']

@@ -10,7 +10,7 @@ import 'package:sqflite/sqflite.dart';
 
 class AgendaDB {
   static final nameDB = 'AGENDADB';
-  static final versionDB = 2;
+  static final versionDB = 3;
 
   static Database? _database;
   Future <Database?> get database async {
@@ -28,27 +28,49 @@ class AgendaDB {
     );
   }
 
-  FutureOr<void> _createTables(Database db, int version) {
-    String query = '''CREATE TABLE tblTareas(idTarea INTEGER PRIMARY KEY, 
-                                              nombreTarea VARCHAR(50), 
-                                              descTarea VARCHAR(50), 
-                                              estadoTarea BYTE);
-                      CREATE TABLE tblCarrera(idCarrera INTEGER PRIMARY KEY,
-                                              nomCarrera VARCHAR(50));
-                      CREATE TABLE tblProfesor(idProfe INTEGER PRIMARY KEY,
-                                               nomProfe VARCHAR(80),
-                                               email VARCHAR(50),
-                                               idCarrera INTEGER,
-                                               foreign key(idCarrera) REFERENCES tblCarrera(idCarrera));
-                      CREATE TABLE tblTask(idTask INTEGER PRIMARY KEY,
-                                           nomTask VARCHAR(100),
-                                           fecExpiracion DATETIME,
-                                           fecRecordatorio DATETIME,
-                                           desTask TEXT,
-                                           realizada INTEGER,
-                                           idProfe INTEGER,
-                                           foreign key(idProfe) REFERENCES tblProfe(idProfe))''';
-    db.execute(query);
+  FutureOr<void> _createTables(Database db, int version) async {
+  // Crear la tabla tblTareas
+  await db.execute('''
+    CREATE TABLE tblTareas(
+      idTarea INTEGER PRIMARY KEY, 
+      nombreTarea VARCHAR(50), 
+      descTarea VARCHAR(50), 
+      estadoTarea BYTE
+    )
+  ''');
+
+  // Crear la tabla tblCarrera
+  await db.execute('''
+    CREATE TABLE tblCarrera(
+      idCarrera INTEGER PRIMARY KEY,
+      nomCarrera VARCHAR(50)
+    )
+  ''');
+
+  // Crear la tabla tblProfesor
+  await db.execute('''
+    CREATE TABLE tblProfesor(
+      idProfe INTEGER PRIMARY KEY,
+      nomProfe VARCHAR(80),
+      email VARCHAR(50),
+      idCarrera INTEGER,
+      foreign key(idCarrera) REFERENCES tblCarrera(idCarrera)
+    )
+  ''');
+
+  // Crear la tabla tblTask
+  await db.execute('''
+    CREATE TABLE tblTask(
+      idTask INTEGER PRIMARY KEY,
+      nomTask VARCHAR(100),
+      fecExpiracion DATETIME,
+      fecRecordatorio DATETIME,
+      desTask TEXT,
+      realizada INTEGER,
+      idProfe INTEGER,
+      foreign key(idProfe) REFERENCES tblProfe(idProfe)
+    )
+  ''');
   }
 
   //CRUD tblTareas

@@ -45,8 +45,8 @@ class _PR4AddCarreraState extends State<PR4AddCarrera> {
       ElevatedButton(
         onPressed: (){
           if (widget.carreraModel == null){
-            agendaDB!.INSERT('tblTareas', {
-              'nombreTarea' : txtCarreraName.text
+            agendaDB!.INSERT('tblCarrera', {
+              'nomCarrera' : txtCarreraName.text
             }).then((value){
               var msj = (value > 0)
                 ? 'La inserción fue exitosa'
@@ -57,7 +57,7 @@ class _PR4AddCarreraState extends State<PR4AddCarrera> {
             });
           }
           else{
-            agendaDB!.UPDATE4('idCarrera', {
+            agendaDB!.UPDATE4('tblCarrera', {
               'idCarrera' : widget.carreraModel!.idCarrera,
               'nomCarrera' : txtCarreraName.text
             }, 'idCarrera', widget.carreraModel!.idCarrera!).then((value){

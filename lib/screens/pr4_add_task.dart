@@ -5,99 +5,147 @@ import 'package:pmsn20232/models/profe_model.dart';
 import 'package:pmsn20232/models/task_model.dart';
 
 class PR4AddTask extends StatefulWidget {
-  final TaskModel? task;
+  PR4AddTask({super.key,this.taskModel});
 
-  PR4AddTask({this.task});
+  TaskModel? taskModel;
 
   @override
-  _PR4AddTaskState createState() => _PR4AddTaskState();
+  State<PR4AddTask> createState() => _PR4AddTaskState();
 }
 
 class _PR4AddTaskState extends State<PR4AddTask> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _taskNameController = TextEditingController();
-  DateTime? _expiracionDate;
-  DateTime? _recordatorioDate;
-  final TextEditingController _taskDescController = TextEditingController();
-  int? _selectedTaskStatus;
-  int? _selectedProfesorId;
-  List<TaskStatus> _taskStatusList = [
+
+  //final _formKey = GlobalKey<FormState>();
+  TextEditingController taskNameController = TextEditingController();
+  DateTime? expiracionDate;
+  DateTime? recordatorioDate;
+  TextEditingController taskDescController = TextEditingController();
+  int? selectedTaskStatus;
+  int? selectedIDProfesor;
+  List<TaskStatus> taskStatusList = [
     TaskStatus(0, 'Pendiente'),
     TaskStatus(1, 'En proceso'),
     TaskStatus(2, 'Completada'),
   ];
-  List<ProfeModel> _profesores = [];
+  List<ProfeModel> profesores = [];
+
+  AgendaDB? agendaDB;
 
   @override
   void initState() {
     super.initState();
-    _loadProfesores();
-    if (widget.task != null) {
-      _taskNameController.text = widget.task!.nomTask!;
-      _expiracionDate = widget.task!.fecExpiracion;
-      _recordatorioDate = widget.task!.fecRecordatorio;
-      _taskDescController.text = widget.task!.desTask!;
-      _selectedTaskStatus = widget.task!.realizada;
-      _selectedProfesorId = widget.task!.idProfe;
+    agendaDB = AgendaDB();
+    if (widget.taskModel != null) {
+      taskNameController.text = widget.taskModel!.nomTask!;
+      expiracionDate = widget.taskModel?.fecExpiracion;
+      recordatorioDate = widget.taskModel?.fecRecordatorio;
+      taskDescController.text = widget.taskModel!.desTask!;
+      selectedTaskStatus = widget.taskModel?.realizada;
+      selectedIDProfesor = widget.taskModel?.idProfe;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final txtNameTask = TextFormField(
+      decoration: const InputDecoration(
+        label: Text('Tarea'),
+        border: OutlineInputBorder()
+      ),
+      controller: taskNameController,
+    );
+
+    final txtDescTask = TextFormField(
+      decoration: const InputDecoration(
+        label: Text('Descripcion'),
+        border: OutlineInputBorder()
+      ),
+      controller: taskDescController,
+    );
+
+    final space = SizedBox(
+      height: 10,
+    );
+
+    final ElevatedButton btnGuardar = ElevatedButton(
+      onPressed: (){
+          if (widget.taskModel == null){
+            agendaDB!.INSERT('tblTask', {
+              'nomTask' : taskNameController.text,
+              'fecExpiracion' : expiracionDate!.toIso8601String(),
+              'fecRecordatorio' : recordatorioDate!.toIso8601String(),
+              'desTask' : taskDescController.text,
+              'realizada' : selectedTaskStatus,
+              'idProfe' : selectedIDProfesor,
+            }).then((value){
+              var msj = (value > 0)
+                ? 'La inserción fue exitosa'
+                : 'Ocurrió un error';
+              var snackbar = SnackBar(content: Text(msj));
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              Navigator.pop(context);
+            });
+          }
+          else{
+            agendaDB!.UPDATE4('tblTask',{
+              'idTask' : widget.taskModel!.idTask,
+              'nomTask' : taskNameController.text,
+              'fecExpiracion' : expiracionDate!.toIso8601String(),
+              'fecRecordatorio' : recordatorioDate!.toIso8601String(),
+              'desTask' : taskDescController.text,
+              'realizada' : selectedTaskStatus,
+              'idProfe' : selectedIDProfesor,
+            },'idTask', widget.taskModel!.idTask!).then((value){
+              GlobalValues.flagPR4Task.value = !GlobalValues.flagPR4Task.value;
+              var msj = (value > 0)
+                ? 'La actualización fue exitosa'
+                : 'Ocurrió un error';
+              var snackbar = SnackBar(content: Text(msj));
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              Navigator.pop(context);
+            });
+          }
+        }, 
+        child: Text('Guardar Tarea')
+    );
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.task == null ? 'Agregar Tarea' : 'Editar Tarea'),
+        title: widget.taskModel == null 
+        ? Text('Agregar Tarea') 
+        : Text('Editar Tarea'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                controller: _taskNameController,
-                decoration: InputDecoration(labelText: 'Nombre de la Tarea'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingrese un nombre para la tarea.';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              DateTimePicker(
-                labelText: 'Fecha de Expiración',
-                selectedDate: _expiracionDate!,
-                onDateSelected: (date) {
-                  setState(() {
-                    _expiracionDate = date;
-                  });
-                },
-              ),
-              SizedBox(height: 16.0),
-              DateTimePicker(
-                labelText: 'Fecha de Recordatorio',
-                selectedDate: _recordatorioDate!,
-                onDateSelected: (date) {
-                  setState(() {
-                    _recordatorioDate = date;
-                  });
-                },
-              ),
-              TextFormField(
-                controller: _taskDescController,
-                decoration: InputDecoration(labelText: 'Descripcion de la Tarea'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingrese una descripcion para la tarea.';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              DropdownButtonFormField<int>(
-                value: _selectedTaskStatus,
-                items: _taskStatusList.map((status) {
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            txtNameTask,
+            space,
+            DateTimePicker(
+              labelText: 'Fecha de Expiración',
+              selectedDate: expiracionDate ?? DateTime.now(),
+              onDateSelected: (date) {
+                setState(() {
+                  expiracionDate = date;
+                });
+              },
+            ),
+            space,
+            DateTimePicker(
+              labelText: 'Fecha de Recordatorio',
+              selectedDate: recordatorioDate ?? DateTime.now(),
+              onDateSelected: (date) {
+                setState(() {
+                  recordatorioDate = date;
+                });
+              },
+            ),
+            space,
+            txtDescTask,
+            space,
+            DropdownButtonFormField<int>(
+                value: selectedTaskStatus,
+                items: taskStatusList.map((status) {
                   return DropdownMenuItem<int>(
                     value: status.value,
                     child: Text(status.label),
@@ -105,103 +153,50 @@ class _PR4AddTaskState extends State<PR4AddTask> {
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _selectedTaskStatus = value;
+                    selectedTaskStatus = value;
                   });
                 },
                 decoration: InputDecoration(
                   labelText: 'Estado',
                 ),
               ),
-              DropdownButtonFormField<int>(
-                value: _selectedProfesorId,
-                items: _profesores.map((profe) {
-                  return DropdownMenuItem<int>(
-                    value: profe.idProfe,
-                    child: Text(profe.nomProfe!),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedProfesorId = value;
-                  });
+              space,
+              FutureBuilder<List<ProfeModel>>(
+                future: agendaDB!.GETALLPROFESORES(), 
+                builder: (context, snapshot){
+                  if(snapshot.connectionState == ConnectionState.done){  
+                    if(snapshot.hasData){
+                      profesores = snapshot.data!;
+                      return DropdownButtonFormField<int>(
+                        value: selectedIDProfesor,
+                        items: profesores.map((profesor){
+                          return DropdownMenuItem<int>(
+                            value: profesor.idProfe,
+                            child: Text(profesor.nomProfe!),
+                          );
+                        }).toList(),
+                        onChanged: (value){
+                          setState(() {
+                            selectedIDProfesor = value;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Profesor'
+                        ),
+                      );
+                    }else{
+                      return const Text('No se encontraron profesores');
+                    }
+                  }else{
+                    return CircularProgressIndicator();
+                  }
                 },
-                decoration: InputDecoration(
-                  labelText: 'Profesor',
-                ),
               ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _submitTask,
-                child: Text('Guardar Tarea'),
-              ),
-            ],
-          ),
+              space,
+              btnGuardar
+          ],
         ),
       ),
-    );
-  }
-
-  void _loadProfesores() async {
-    List<ProfeModel> profesores = await AgendaDB().GETALLPROFESORES();
-    setState(() {
-      _profesores = profesores;
-    });
-  }
-
-  void _submitTask() {
-    if (_formKey.currentState!.validate()) {
-      final task = TaskModel(
-        nomTask: _taskNameController.text,
-        fecExpiracion: _expiracionDate,
-        fecRecordatorio: _recordatorioDate,
-        desTask: _taskDescController.text,
-        realizada: _selectedTaskStatus,
-        idProfe: _selectedProfesorId,
-      );
-
-      if (widget.task == null) {
-        // Insertar nueva tarea
-        AgendaDB().INSERT('tblTask', {
-          'nomTask' : _taskNameController.text,
-          'fecExpiracion' : _expiracionDate,
-          'fecRecordatorio' : _recordatorioDate,
-          'desTask' : _taskDescController.text,
-          'realizada' : _selectedTaskStatus,
-          'idProfe' : _selectedProfesorId,
-        }).then((value) {
-          var msj = (value > 0)
-                ? 'La inserción fue exitosa'
-                : 'Ocurrió un error';
-              var snackbar = SnackBar(content: Text(msj));
-              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-              Navigator.pop(context);
-        });
-      } else {
-        // Actualizar tarea existente
-        AgendaDB().UPDATE4('tblTask',{
-          'idTask' : widget.task!.idTask,
-          'nomTask' : _taskNameController.text,
-          'fecExpiracion' : _expiracionDate,
-          'fecRecordatorio' : _recordatorioDate,
-          'desTask' : _taskDescController.text,
-          'realizada' : _selectedTaskStatus,
-          'idProfe' : _selectedProfesorId,
-        },'idTask', widget.task!.idTask!).then((value) {
-          GlobalValues.flagPR4Task.value = !GlobalValues.flagPR4Task.value;
-          var msj = (value > 0)
-                ? 'La actualización fue exitosa'
-                : 'Ocurrió un error';
-              var snackbar = SnackBar(content: Text(msj));
-              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-              Navigator.pop(context);
-        });
-      }
-    }
-  }
-
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
     );
   }
 }
