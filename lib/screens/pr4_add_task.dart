@@ -78,6 +78,7 @@ class _PR4AddTaskState extends State<PR4AddTask> {
               'realizada' : selectedTaskStatus,
               'idProfe' : selectedIDProfesor,
             }).then((value){
+              print(recordatorioDate);
               var msj = (value > 0)
                 ? 'La inserción fue exitosa'
                 : 'Ocurrió un error';

@@ -21,6 +21,43 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
   void initState() {
     super.initState();
     agendaDB = AgendaDB();
+    verificarRecordatorios();
+  }
+
+  void verificarRecordatorios() async {
+    final now = DateTime.now().toLocal();
+    final formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    print(formattedDate);
+    final tareasHoy = await agendaDB!.getTareasRecordatorio(formattedDate);
+
+    if(tareasHoy.isNotEmpty){
+      mostrarAlerta(tareasHoy);
+    }
+  }
+
+  void mostrarAlerta(List<TaskModel> tareas){
+    showDialog(
+      context: context, 
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Recordatorio de Tareas'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: tareas.map((tarea) {
+              return Text('Tarea: ${tarea.nomTask}');
+            }).toList(),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: (){
+                Navigator.of(context).pop();
+              }, 
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
