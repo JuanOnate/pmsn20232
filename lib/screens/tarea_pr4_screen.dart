@@ -15,6 +15,7 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
 
   AgendaDB? agendaDB;
   String searchTerm = '';
+  int? selectedTaskStatus;
 
   @override
   void initState() {
@@ -42,18 +43,52 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
           )
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48.0),
+          preferredSize: const Size.fromHeight(150.0),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: (value) {
-                setState(() {
-                  searchTerm = value;
-                });
-              },
-              decoration: InputDecoration(
-                hintText: 'Buscar tarea...',
-              ),
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      searchTerm = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Buscar tarea...',
+                  ),
+                ),
+                SizedBox(height: 5.0),
+                DropdownButtonFormField<int>(
+                  value: selectedTaskStatus,
+                  items: [
+                    DropdownMenuItem<int>(
+                      value: null,
+                      child: Text('Todos'),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 0,
+                      child: Text('Pendiente'),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 1,
+                      child: Text('En proceso'),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 2,
+                      child: Text('Completada'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      selectedTaskStatus = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Filtrar por estado',
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -62,7 +97,7 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
         valueListenable: GlobalValues.flagPR4Task,
         builder: (context, value, _){
           return FutureBuilder(
-            future: agendaDB!.searchTasks(searchTerm), 
+            future: agendaDB!.searchTasks(searchTerm, selectedTaskStatus), 
             builder: (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot){
               if(snapshot.hasData){
                 return ListView.builder(

@@ -146,11 +146,16 @@ class AgendaDB {
     return result.map((profe) => ProfeModel.fromMap(profe)).toList();
   }
 
-  Future<List<TaskModel>> searchTasks(String searchTerm) async {
+  Future<List<TaskModel>> searchTasks(String searchTerm, int? selectedTaskStatus) async {
     var conexion = await database;
-    var result = await conexion!.query('tblTask',
-        where: 'nomTask LIKE ?',
-        whereArgs: ['%$searchTerm%']);
+    String whereClause = 'nomTask LIKE ?';
+    List<dynamic> whereArgs = ['%$searchTerm%'];
+
+    if (selectedTaskStatus != null){
+      whereClause += ' AND realizada = ?';
+      whereArgs.add(selectedTaskStatus);
+    }
+    var result = await conexion!.query('tblTask', where: whereClause, whereArgs: whereArgs);
     return result.map((task) => TaskModel.fromMap(task)).toList();
   }
   
