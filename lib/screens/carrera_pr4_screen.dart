@@ -12,8 +12,8 @@ class CarreraPR4Screen extends StatefulWidget {
 }
 
 class _CarreraPR4ScreenState extends State<CarreraPR4Screen> {
-
   AgendaDB? agendaDB;
+  String searchTerm = '';
 
   @override
   void initState() {
@@ -28,37 +28,56 @@ class _CarreraPR4ScreenState extends State<CarreraPR4Screen> {
         title: const Text('Admin de Carreras'),
         actions: [
           IconButton(
-            onPressed: ()=>Navigator.pushNamed(context, '/addCarrera').then((value){setState((){});}), 
-            icon: const Icon(Icons.hdr_plus_outlined)
+            onPressed: () =>
+                Navigator.pushNamed(context, '/addCarrera').then((value) {
+              setState(() {});
+            }),
+            icon: const Icon(Icons.hdr_plus_outlined),
           )
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchTerm = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Buscar carrera...',
+              ),
+            ),
+          ),
+        ),
       ),
       body: ValueListenableBuilder(
         valueListenable: GlobalValues.flagPR4Carrera,
-        builder: (context, value, _){
+        builder: (context, value, _) {
           return FutureBuilder(
-            future: agendaDB!.GETALLCARRERAS(), 
-            builder: (BuildContext context, AsyncSnapshot<List<CarreraModel>> snapshot){
-              if(snapshot.hasData){
+            future: agendaDB!.searchCarreras(searchTerm),
+            builder: (BuildContext context, AsyncSnapshot<List<CarreraModel>> snapshot) {
+              if (snapshot.hasData) {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
-                  itemBuilder: (BuildContext context, int index){
+                  itemBuilder: (BuildContext context, int index) {
                     return CardCarreraWidget(
                       carreraModel: snapshot.data![index],
                       agendaDB: agendaDB,
                     );
                   },
                 );
-              }else{
-                if(snapshot.hasError){
+              } else {
+                if (snapshot.hasError) {
                   return const Center(
                     child: Text('Error!'),
                   );
-                }else{
+                } else {
                   return CircularProgressIndicator();
                 }
               }
-            }
+            },
           );
         },
       ),

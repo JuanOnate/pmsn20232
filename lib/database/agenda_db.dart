@@ -129,4 +129,12 @@ class AgendaDB {
     var conexion = await database;
     return conexion!.delete(tblName, where: '$whereCampo = ?', whereArgs: [id]);
   }
+
+   Future<List<CarreraModel>> searchCarreras(String searchTerm) async {
+  var conexion = await database;
+  var result = await conexion!.query('tblCarrera',
+      where: 'nomCarrera LIKE ?',
+      whereArgs: ['%$searchTerm%']);
+  return result.map((carrera) => CarreraModel.fromMap(carrera)).toList();}
+  
 }
