@@ -43,7 +43,7 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
         ],
       ),
       body: ValueListenableBuilder(
-        valueListenable: GlobalValues.flagTask,
+        valueListenable: GlobalValues.flagPR4Task,
         builder: (context, value, _){
           return FutureBuilder(
             future: agendaDB!.GETALLTASKS(), 
