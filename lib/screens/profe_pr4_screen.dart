@@ -14,6 +14,7 @@ class ProfePR4Screen extends StatefulWidget {
 class _ProfePR4ScreenState extends State<ProfePR4Screen> {
 
   AgendaDB? agendaDB;
+  String searchTerm = '';
 
   @override
   void initState() {
@@ -32,12 +33,28 @@ class _ProfePR4ScreenState extends State<ProfePR4Screen> {
             icon: const Icon(Icons.hdr_plus_outlined)
           )
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value){
+                setState(() {
+                  searchTerm = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Buscar profesor...',
+              ),
+            ),
+          ),
+        ),
       ),
       body: ValueListenableBuilder(
         valueListenable: GlobalValues.flagPR4Profe,
         builder: (context, value, _){
           return FutureBuilder(
-            future: agendaDB!.GETALLPROFESORES(), 
+            future: agendaDB!.searchProfesores(searchTerm), 
             builder: (BuildContext context, AsyncSnapshot<List<ProfeModel>> snapshot){
               if(snapshot.hasData){
                 return ListView.builder(

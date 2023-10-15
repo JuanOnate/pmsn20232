@@ -13,8 +13,8 @@ class TareaPR4Screen extends StatefulWidget {
 
 class _TareaPR4ScreenState extends State<TareaPR4Screen> {
 
-
   AgendaDB? agendaDB;
+  String searchTerm = '';
 
   @override
   void initState() {
@@ -41,12 +41,28 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
             icon: const Icon(Icons.paypal)
           )
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchTerm = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Buscar tarea...',
+              ),
+            ),
+          ),
+        ),
       ),
       body: ValueListenableBuilder(
         valueListenable: GlobalValues.flagPR4Task,
         builder: (context, value, _){
           return FutureBuilder(
-            future: agendaDB!.GETALLTASKS(), 
+            future: agendaDB!.searchTasks(searchTerm), 
             builder: (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot){
               if(snapshot.hasData){
                 return ListView.builder(

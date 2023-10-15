@@ -130,11 +130,28 @@ class AgendaDB {
     return conexion!.delete(tblName, where: '$whereCampo = ?', whereArgs: [id]);
   }
 
-   Future<List<CarreraModel>> searchCarreras(String searchTerm) async {
-  var conexion = await database;
-  var result = await conexion!.query('tblCarrera',
-      where: 'nomCarrera LIKE ?',
-      whereArgs: ['%$searchTerm%']);
-  return result.map((carrera) => CarreraModel.fromMap(carrera)).toList();}
+  Future<List<CarreraModel>> searchCarreras(String searchTerm) async {
+    var conexion = await database;
+    var result = await conexion!.query('tblCarrera',
+        where: 'nomCarrera LIKE ?',
+        whereArgs: ['%$searchTerm%']);
+    return result.map((carrera) => CarreraModel.fromMap(carrera)).toList();
+  }
+
+  Future<List<ProfeModel>> searchProfesores(String searchTerm) async {
+    var conexion = await database;
+    var result = await conexion!.query('tblProfesor',
+        where: 'nomProfe LIKE ?',
+        whereArgs: ['%$searchTerm%']);
+    return result.map((profe) => ProfeModel.fromMap(profe)).toList();
+  }
+
+  Future<List<TaskModel>> searchTasks(String searchTerm) async {
+    var conexion = await database;
+    var result = await conexion!.query('tblTask',
+        where: 'nomTask LIKE ?',
+        whereArgs: ['%$searchTerm%']);
+    return result.map((task) => TaskModel.fromMap(task)).toList();
+  }
   
 }
