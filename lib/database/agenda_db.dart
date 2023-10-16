@@ -164,4 +164,10 @@ class AgendaDB {
     var result = await conexion!.query('tblTask', where: 'DATE(fecRecordatorio) = ?', whereArgs: [formattedDate]);
     return result.map((task) => TaskModel.fromMap(task)).toList();
   }
+
+  Future<List<TaskModel>> getTareasExpiracion(String formattedDate) async {
+    var conexion = await database;
+    var result = await conexion!.query('tblTask', where: 'DATE(fecExpiracion) = ?', whereArgs: [formattedDate]);
+    return result.map((task) => TaskModel.fromMap(task)).toList();
+  }
 }

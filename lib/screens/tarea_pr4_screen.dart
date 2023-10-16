@@ -67,6 +67,10 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
         title: const Text('Admin de Tareas PR4'),
         actions: [
           IconButton(
+            onPressed: ()=>Navigator.pushNamed(context, '/calendar').then((value){setState((){});}), 
+            icon: const Icon(Icons.edit_calendar)
+          ),
+          IconButton(
             onPressed: ()=>Navigator.pushNamed(context, '/addTask').then((value){setState((){});}), 
             icon: const Icon(Icons.task)
           ),

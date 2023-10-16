@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:pmsn20232/screens/add_task.dart';
+import 'package:pmsn20232/screens/calendar_screen.dart';
 import 'package:pmsn20232/screens/carrera_pr4_screen.dart';
 import 'package:pmsn20232/screens/dashboard_screen.dart';
 import 'package:pmsn20232/screens/popular_screen.dart';
@@ -21,6 +22,7 @@ Map<String, WidgetBuilder> getRoutes(){
     '/addProfe' : (BuildContext context) => PR4AddProfe(),
     '/profe' : (BuildContext context) => ProfePR4Screen(),
     '/carrera' : (BuildContext context) => CarreraPR4Screen(),
-    '/addTask' : (BuildContext context) => PR4AddTask()
+    '/addTask' : (BuildContext context) => PR4AddTask(),
+    '/calendar' : (BuildContext context) => TableEventsExample(),
   };
 }
