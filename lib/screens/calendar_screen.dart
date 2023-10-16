@@ -10,7 +10,7 @@ class Event {
   final int status;
   final DateTime date;
 
-  Event(this.title, this.description, this.status ,this.date);
+  Event(this.title, this.description, this.status, this.date);
 
   @override
   String toString() => title;
@@ -24,45 +24,47 @@ class TableEventsExample extends StatefulWidget {
 class _TableEventsExampleState extends State<TableEventsExample> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff; // Can be toggled on/off by longpressing a date
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
+  Map<DateTime, List<Event>> _eventsByDate = {};
+
   @override
   void initState() {
     super.initState();
-
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier<List<Event>>([]);
+    _loadEventsForDays(kFirstDay, kLastDay);
+
     _loadEventsForDay(_selectedDay!);
   }
 
-  @override
-  void dispose() {
-    _selectedEvents.dispose();
-    super.dispose();
+  Future<void> _loadEventsForDays(DateTime start, DateTime end) async {
+    for (var day = start; day.isBefore(end) || day.isAtSameMomentAs(end); day = day.add(const Duration(days: 1))) {
+      await _loadEventsForDay(day);
+    }
   }
 
-  Future<List<Event>> _loadEventsForDay(DateTime day) async {
-    //String formattedDate = day.toIso8601String();
+  Future<void> _loadEventsForDay(DateTime day) async {
     String formattedDate = "${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}";
     List<TaskModel> tasks = await AgendaDB().getTareasExpiracion(formattedDate);
-    for(var task in tasks){
-      print("Desc de la tarea: ${task.desTask}");
-    }
     List<Event> events = tasks.map((task) => Event(task.nomTask!, task.desTask!, task.realizada!, day)).toList();
-    return events;
+    _eventsByDate[day] = events;
+    if (isSameDay(day, _selectedDay)) {
+      _selectedEvents.value = events;
+    }
   }
 
   List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    final days = daysInRange(start, end);
-    List<Event> events = [];
+    final events = <Event>[];
 
-    for (final d in days) {
-      events.addAll(_selectedEvents.value.where((event) => isSameDay(event.date, d)));
+    for (var day = start; day.isBefore(end) || day.isAtSameMomentAs(end); day = day.add(const Duration(days: 1))) {
+      if (_eventsByDate.containsKey(day)) {
+        events.addAll(_eventsByDate[day]!);
+      }
     }
 
     return events;
@@ -73,14 +75,12 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
+        _rangeStart = null;
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
 
-      _loadEventsForDay(selectedDay).then((events) {
-        _selectedEvents.value = events;
-      });
+      _selectedEvents.value = _eventsByDate[selectedDay] ?? [];
     }
   }
 
@@ -96,13 +96,9 @@ class _TableEventsExampleState extends State<TableEventsExample> {
     if (start != null && end != null) {
       _selectedEvents.value = _getEventsForRange(start, end);
     } else if (start != null) {
-      _loadEventsForDay(start).then((events) {
-        _selectedEvents.value = events;
-      });
+      _selectedEvents.value = _eventsByDate[start] ?? [];
     } else if (end != null) {
-      _loadEventsForDay(end).then((events) {
-        _selectedEvents.value = events;
-      });
+      _selectedEvents.value = _eventsByDate[end] ?? [];
     }
   }
 
@@ -142,6 +138,10 @@ class _TableEventsExampleState extends State<TableEventsExample> {
             ),
             onDaySelected: _onDaySelected,
             onRangeSelected: _onRangeSelected,
+            onPageChanged: (focusedDay) {
+              _focusedDay = focusedDay;
+              _loadEventsForDays(focusedDay.subtract(const Duration(days: 15)), focusedDay.add(const Duration(days: 15)));
+            },
             onFormatChanged: (format) {
               if (_calendarFormat != format) {
                 setState(() {
@@ -149,9 +149,7 @@ class _TableEventsExampleState extends State<TableEventsExample> {
                 });
               }
             },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
+            eventLoader: (day) => _eventsByDate[day] ?? [],
           ),
           const SizedBox(height: 8.0),
           Expanded(
