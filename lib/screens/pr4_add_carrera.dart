@@ -44,7 +44,26 @@ class _PR4AddCarreraState extends State<PR4AddCarrera> {
     final ElevatedButton btnGuardar = 
       ElevatedButton(
         onPressed: (){
-          if (widget.carreraModel == null){
+          if(txtCarreraName.text.isEmpty){
+            showDialog(
+              context: context, 
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Recordatorio de Tareas'),
+                  content: Text('Favor de ingresar una carrera válida'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('Aceptar'),
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      }, 
+                    )
+                  ],
+                );
+              },
+            );
+          }else{
+            if (widget.carreraModel == null){
             agendaDB!.INSERT('tblCarrera', {
               'nomCarrera' : txtCarreraName.text
             }).then((value){
@@ -55,20 +74,21 @@ class _PR4AddCarreraState extends State<PR4AddCarrera> {
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
               Navigator.pop(context);
             });
-          }
-          else{
-            agendaDB!.UPDATE4('tblCarrera', {
-              'idCarrera' : widget.carreraModel!.idCarrera,
-              'nomCarrera' : txtCarreraName.text
-            }, 'idCarrera', widget.carreraModel!.idCarrera!).then((value){
-              GlobalValues.flagPR4Carrera.value = !GlobalValues.flagPR4Carrera.value;
-              var msj = (value > 0)
-                ? 'La actualización fue exitosa'
-                : 'Ocurrió un error';
-              var snackbar = SnackBar(content: Text(msj));
-              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-              Navigator.pop(context);
-            });
+            }
+            else{
+              agendaDB!.UPDATE4('tblCarrera', {
+                'idCarrera' : widget.carreraModel!.idCarrera,
+                'nomCarrera' : txtCarreraName.text
+              }, 'idCarrera', widget.carreraModel!.idCarrera!).then((value){
+                GlobalValues.flagPR4Carrera.value = !GlobalValues.flagPR4Carrera.value;
+                var msj = (value > 0)
+                  ? 'La actualización fue exitosa'
+                  : 'Ocurrió un error';
+                var snackbar = SnackBar(content: Text(msj));
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                Navigator.pop(context);
+              });
+            }
           }
         }, 
         child: Text('Guardar carrera')

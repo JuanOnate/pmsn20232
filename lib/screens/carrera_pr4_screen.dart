@@ -32,7 +32,7 @@ class _CarreraPR4ScreenState extends State<CarreraPR4Screen> {
                 Navigator.pushNamed(context, '/addCarrera').then((value) {
               setState(() {});
             }),
-            icon: const Icon(Icons.hdr_plus_outlined),
+            icon: const Icon(Icons.add_circle_outline_rounded),
           )
         ],
         bottom: PreferredSize(

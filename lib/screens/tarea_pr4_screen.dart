@@ -68,19 +68,19 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
         actions: [
           IconButton(
             onPressed: ()=>Navigator.pushNamed(context, '/calendar').then((value){setState((){});}), 
-            icon: const Icon(Icons.edit_calendar)
+            icon: const Icon(Icons.calendar_month_rounded)
           ),
           IconButton(
             onPressed: ()=>Navigator.pushNamed(context, '/addTask').then((value){setState((){});}), 
-            icon: const Icon(Icons.task)
+            icon: const Icon(Icons.task_rounded)
           ),
           IconButton(
             onPressed: ()=>Navigator.pushNamed(context, '/profe').then((value){setState((){});}), 
-            icon: const Icon(Icons.android)
+            icon: const Icon(Icons.accessibility)
           ),
           IconButton(
             onPressed: ()=>Navigator.pushNamed(context, '/carrera').then((value){setState((){});}), 
-            icon: const Icon(Icons.paypal)
+            icon: const Icon(Icons.business_center_rounded)
           )
         ],
         bottom: PreferredSize(
