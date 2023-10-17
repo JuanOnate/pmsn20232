@@ -64,7 +64,7 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin de Tareas PR4'),
+        title: const Text('Tareas'),
         actions: [
           IconButton(
             onPressed: ()=>Navigator.pushNamed(context, '/calendar').then((value){setState((){});}), 
@@ -105,7 +105,7 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
                   items: [
                     DropdownMenuItem<int>(
                       value: null,
-                      child: Text('Todos'),
+                      child: Text('Todas'),
                     ),
                     DropdownMenuItem<int>(
                       value: 0,
