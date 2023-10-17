@@ -22,10 +22,15 @@ class CardCarreraWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Column(
-            children: [
-              Text(carreraModel.nomCarrera!)
-            ],
+          Expanded(
+            child: 
+              Column(
+                children: [
+                  Text(carreraModel.nomCarrera!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,)
+                ],
+              ),
           ),
           Expanded(
             child: Container(),
@@ -39,7 +44,7 @@ class CardCarreraWidget extends StatelessWidget {
                     builder: (context) => PR4AddCarrera(carreraModel: carreraModel)
                   )
                 ),
-                child: Image.asset('assets/icon_orange.png', height:50),
+                child: Icon(Icons.border_color_rounded),
               ),
               IconButton(
                 onPressed: (){

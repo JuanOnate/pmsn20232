@@ -27,6 +27,26 @@ class _PR4AddCarreraState extends State<PR4AddCarrera> {
     }
   }
 
+  void alerta(String content) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Alerta Carrera'),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final txtNameCarrera = TextFormField(
@@ -44,50 +64,38 @@ class _PR4AddCarreraState extends State<PR4AddCarrera> {
     final ElevatedButton btnGuardar = 
       ElevatedButton(
         onPressed: (){
-          if(txtCarreraName.text.isEmpty){
-            showDialog(
-              context: context, 
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('Recordatorio de Tareas'),
-                  content: Text('Favor de ingresar una carrera válida'),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text('Aceptar'),
-                      onPressed: (){
-                        Navigator.of(context).pop();
-                      }, 
-                    )
-                  ],
-                );
-              },
-            );
+          if(txtCarreraName.text.isEmpty || txtCarreraName.text.trim().isEmpty){
+            alerta('No puedes dejar la carrera vacía');
           }else{
-            if (widget.carreraModel == null){
-            agendaDB!.INSERT('tblCarrera', {
-              'nomCarrera' : txtCarreraName.text
-            }).then((value){
-              var msj = (value > 0)
-                ? 'La inserción fue exitosa'
-                : 'Ocurrió un error';
-              var snackbar = SnackBar(content: Text(msj));
-              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-              Navigator.pop(context);
-            });
-            }
-            else{
-              agendaDB!.UPDATE4('tblCarrera', {
-                'idCarrera' : widget.carreraModel!.idCarrera,
-                'nomCarrera' : txtCarreraName.text
-              }, 'idCarrera', widget.carreraModel!.idCarrera!).then((value){
-                GlobalValues.flagPR4Carrera.value = !GlobalValues.flagPR4Carrera.value;
-                var msj = (value > 0)
-                  ? 'La actualización fue exitosa'
-                  : 'Ocurrió un error';
-                var snackbar = SnackBar(content: Text(msj));
-                ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                Navigator.pop(context);
-              });
+            if(txtCarreraName.text.length > 50){
+              alerta('El nombre de la carrera es muy largo');
+            }else{
+              if(widget.carreraModel == null){
+                agendaDB!.INSERT('tblCarrera', {
+                  'nomCarrera' : txtCarreraName.text
+                }).then((value){
+                  var msj = (value > 0)
+                    ? 'La inserción fue exitosa'
+                    : 'Ocurrió un error';
+                  var snackbar = SnackBar(content: Text(msj));
+                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  Navigator.pop(context);
+                });
+              }
+              else{
+                agendaDB!.UPDATE4('tblCarrera', {
+                  'idCarrera' : widget.carreraModel!.idCarrera,
+                  'nomCarrera' : txtCarreraName.text
+                }, 'idCarrera', widget.carreraModel!.idCarrera!).then((value){
+                  GlobalValues.flagPR4Carrera.value = !GlobalValues.flagPR4Carrera.value;
+                  var msj = (value > 0)
+                    ? 'La actualización fue exitosa'
+                    : 'Ocurrió un error';
+                  var snackbar = SnackBar(content: Text(msj));
+                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  Navigator.pop(context);
+                });
+              }
             }
           }
         }, 
@@ -112,4 +120,5 @@ class _PR4AddCarreraState extends State<PR4AddCarrera> {
       ),
     );
   }
+  
 }
