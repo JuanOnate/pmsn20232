@@ -127,7 +127,19 @@ class AgendaDB {
 
   Future<int> DELETE4(String tblName, String whereCampo, int id) async{
     var conexion = await database;
+    bool hasProfessors = await _hasProfessorsForCarrera(id);
+    if(hasProfessors){
+      return 0;
+    }
     return conexion!.delete(tblName, where: '$whereCampo = ?', whereArgs: [id]);
+  }
+
+  Future<bool> _hasProfessorsForCarrera(int idCarrera) async {
+    var conexion = await database;
+    var result = await conexion!.query('tblProfesor',
+        where: 'idCarrera = ?',
+        whereArgs: [idCarrera]);
+    return result.isNotEmpty;
   }
 
   Future<List<CarreraModel>> searchCarreras(String searchTerm) async {
