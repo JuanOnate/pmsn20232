@@ -28,12 +28,10 @@ class CardCarreraWidget extends StatelessWidget {
                 children: [
                   Text(carreraModel.nomCarrera!,
                   maxLines: 2,
-                  overflow: TextOverflow.ellipsis,)
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontWeight: FontWeight.bold),)
                 ],
               ),
-          ),
-          Expanded(
-            child: Container(),
           ),
           Column(
             children: [

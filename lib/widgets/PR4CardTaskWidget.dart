@@ -22,14 +22,17 @@ class PR4CardTaskWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Column(
-            children: [
-              Text(taskModel.nomTask!),
-              Text(taskModel.desTask!)
-            ],
-          ),
           Expanded(
-            child: Container(),
+            child: Column(
+              
+              children: [
+                Text(taskModel.nomTask!, 
+                maxLines: 2, 
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontWeight: FontWeight.bold),),
+                Text(taskModel.desTask!)
+              ],
+            ),
           ),
           Column(
             children: [
@@ -40,7 +43,7 @@ class PR4CardTaskWidget extends StatelessWidget {
                     builder: (context) => PR4AddTask(taskModel: taskModel)
                   )
                 ),
-                child: Image.asset('assets/icon_orange.png', height:50),
+                child: Icon(Icons.border_color_rounded),
               ),
               IconButton(
                 onPressed: (){

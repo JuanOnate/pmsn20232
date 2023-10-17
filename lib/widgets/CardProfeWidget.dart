@@ -62,6 +62,7 @@ class _CardProfeWidgetState extends State<CardProfeWidget> {
                   widget.profeModel.nomProfe!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.profeModel.email!,
