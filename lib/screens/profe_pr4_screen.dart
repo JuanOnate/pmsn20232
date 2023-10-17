@@ -30,7 +30,7 @@ class _ProfePR4ScreenState extends State<ProfePR4Screen> {
         actions: [
           IconButton(
             onPressed: ()=>Navigator.pushNamed(context, '/addProfe').then((value){setState((){});}), 
-            icon: const Icon(Icons.hdr_plus_outlined)
+            icon: const Icon(Icons.add_circle_outline_rounded)
           )
         ],
         bottom: PreferredSize(

@@ -107,8 +107,6 @@ class _TableEventsExampleState extends State<TableEventsExample> {
       case 0:
         return 'Pendiente';
       case 1:
-        return 'En proceso';
-      case 2:
         return 'Completada';
       default:
         return 'Desconocido';
@@ -117,6 +115,9 @@ class _TableEventsExampleState extends State<TableEventsExample> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _loadEventsForDays(_focusedDay.subtract(const Duration(days: 15)), _focusedDay.add(const Duration(days: 15)));
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text('TableCalendar - Events'),
