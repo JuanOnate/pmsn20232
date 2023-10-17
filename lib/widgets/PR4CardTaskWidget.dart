@@ -4,13 +4,30 @@ import 'package:pmsn20232/database/agenda_db.dart';
 import 'package:pmsn20232/models/task_model.dart';
 import 'package:pmsn20232/screens/pr4_add_task.dart';
 
-class PR4CardTaskWidget extends StatelessWidget {
+class PR4CardTaskWidget extends StatefulWidget {
   PR4CardTaskWidget(
     {super.key, required this.taskModel, this.agendaDB}
   );
 
   TaskModel taskModel;
   AgendaDB? agendaDB;
+
+  @override
+  State<PR4CardTaskWidget> createState() => _PR4CardTaskWidgetState();
+}
+
+class _PR4CardTaskWidgetState extends State<PR4CardTaskWidget> {
+  bool isTaskCompleted = false;
+
+  @override
+  void initState(){
+    super.initState();
+    if(widget.taskModel.realizada == 1){
+      isTaskCompleted = true;
+    }else{
+      isTaskCompleted = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +41,12 @@ class PR4CardTaskWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Column(
-              
               children: [
-                Text(taskModel.nomTask!, 
+                Text(widget.taskModel.nomTask!, 
                 maxLines: 2, 
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontWeight: FontWeight.bold),),
-                Text(taskModel.desTask!)
+                Text(widget.taskModel.desTask!)
               ],
             ),
           ),
@@ -40,7 +56,7 @@ class PR4CardTaskWidget extends StatelessWidget {
                 onTap: ()=> Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PR4AddTask(taskModel: taskModel)
+                    builder: (context) => PR4AddTask(taskModel: widget.taskModel)
                   )
                 ),
                 child: Icon(Icons.border_color_rounded),
@@ -56,7 +72,7 @@ class PR4CardTaskWidget extends StatelessWidget {
                         actions: [
                           TextButton(
                             onPressed: (){
-                              agendaDB!.DELETE4('tblTask', 'idTask', taskModel.idTask!).then((value){
+                              widget.agendaDB!.DELETE4('tblTask', 'idTask', widget.taskModel.idTask!).then((value){
                                 Navigator.pop(context);
                                 GlobalValues.flagPR4Task.value = !GlobalValues.flagPR4Task.value;
                               });
@@ -73,6 +89,18 @@ class PR4CardTaskWidget extends StatelessWidget {
                   );
                 }, 
                 icon: Icon(Icons.delete)
+              ),
+              Checkbox(
+                value: isTaskCompleted, 
+                onChanged: (newValue){
+                  setState(() {
+                    isTaskCompleted = newValue!;
+                  });
+                  int newValueInt = isTaskCompleted ? 1 : 0;
+                  widget.agendaDB!.UPDATE4('tblTask', {'realizada': newValueInt}, 'idTask', widget.taskModel.idTask!).then((value){
+                    GlobalValues.flagPR4Task.value = !GlobalValues.flagPR4Task.value;
+                  });
+                }
               )
             ],
           )

@@ -24,8 +24,7 @@ class _PR4AddTaskState extends State<PR4AddTask> {
   int? selectedIDProfesor;
   List<TaskStatus> taskStatusList = [
     TaskStatus(0, 'Pendiente'),
-    TaskStatus(1, 'En proceso'),
-    TaskStatus(2, 'Completada'),
+    TaskStatus(1, 'Completada'),
   ];
   List<ProfeModel> profesores = [];
 

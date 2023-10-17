@@ -29,9 +29,9 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
     final formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     print(formattedDate);
     final tareasHoy = await agendaDB!.getTareasRecordatorio(formattedDate);
-
-    if(tareasHoy.isNotEmpty){
-      mostrarAlerta(tareasHoy);
+    final tareasPendientes = tareasHoy.where((tarea) => tarea.realizada != 1).toList();
+    if(tareasPendientes.isNotEmpty){
+      mostrarAlerta(tareasPendientes);
     }
   }
 
@@ -113,12 +113,8 @@ class _TareaPR4ScreenState extends State<TareaPR4Screen> {
                     ),
                     DropdownMenuItem<int>(
                       value: 1,
-                      child: Text('En proceso'),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 2,
                       child: Text('Completada'),
-                    ),
+                    )
                   ],
                   onChanged: (value) {
                     setState(() {
