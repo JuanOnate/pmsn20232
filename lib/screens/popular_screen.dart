@@ -14,6 +14,7 @@ class PopularScreen extends StatefulWidget {
 class _PopularScreenState extends State<PopularScreen> {
 
   ApiPopular? apiPopular;
+  bool showFavoritesOnly = false;
 
   @override
   void initState(){
@@ -24,7 +25,15 @@ class _PopularScreenState extends State<PopularScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Popular Movies'),),
+      appBar: AppBar(
+        title: Text('Popular Movies'),
+        // actions: [
+        //   IconButton(
+        //     onPressed: , 
+        //     icon: const Icon(Icons.favorite_border_outlined)
+        //   )
+        // ],
+        ),
       body: FutureBuilder(
         future: apiPopular!.getAllPopular(), 
         builder: (context, AsyncSnapshot<List<PopularModel>?> snapshot){

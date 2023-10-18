@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:pmsn20232/models/popular_model.dart';
+import 'package:pmsn20232/network/api_cast.dart';
 import 'package:pmsn20232/network/api_trailer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -18,12 +20,20 @@ class MovieDetailScreen extends StatefulWidget {
 
 class _MovieDetailScreenState extends State<MovieDetailScreen> {
   String? trailerKey;
+  List<Map<String, dynamic>> cast = [];
+  bool isFavorite = false;
 
   @override
   void initState(){
     ApiTrailer().getTrailerVideoKey(widget.movie.id!).then((key){
       setState(() {
         trailerKey = key;
+      });
+    });
+
+    ApiCast().getCast(widget.movie.id!).then((actors) {
+      setState(() {
+        cast = actors!;
       });
     });
   }
@@ -80,6 +90,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                 fontWeight: FontWeight.normal,
                 fontStyle: FontStyle.normal,
                 fontSize: 12.0,
+                decoration: TextDecoration.none,
               ),
             ),
             SizedBox(height: 20,),
@@ -94,6 +105,80 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
               ),
               textAlign: TextAlign.justify,
               ),
+            ),
+            SizedBox(height: 20,),
+            SizedBox(
+              height: 150,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: cast.length,
+                itemBuilder: (context, index) {
+                  final actor = cast[index];
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage: NetworkImage('https://image.tmdb.org/t/p/w185/${actor['profile_path']}'),
+                        ),
+                        SizedBox(height: 20,),
+                        Text(
+                          actor['name'],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          actor['character'],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0,
+                            decoration: TextDecoration.none,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              ),
+            ), 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ButtonTheme(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(
+                      color: Color.fromARGB(255, 243, 320, 0)
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 60, 60, 60),
+                      elevation: 0.0,
+                      side: const BorderSide(color: Color.fromARGB(255, 243, 230, 0), width: 2),
+                      minimumSize: const Size(40, 20)
+                    ),
+                    onPressed: (){
+                      setState(() {
+                        isFavorite = !isFavorite;
+                      });
+                    }, 
+                    child: Icon(
+                      isFavorite
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                      color: Color.fromARGB(255, 243, 230, 0),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
