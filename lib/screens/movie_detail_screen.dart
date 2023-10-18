@@ -29,6 +29,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       setState(() {
         trailerKey = key;
       });
+      isFavorite = widget.movie.isFavorite;
     });
 
     ApiCast().getCast(widget.movie.id!).then((actors) {
@@ -38,6 +39,13 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     });
   }
 
+  void _toggleFavorite(){
+    setState(() {
+      isFavorite = !isFavorite;
+      widget.movie.isFavorite = isFavorite;
+      //agregar codigo para guardar en la bd
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,11 +173,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                       side: const BorderSide(color: Color.fromARGB(255, 243, 230, 0), width: 2),
                       minimumSize: const Size(40, 20)
                     ),
-                    onPressed: (){
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
-                    }, 
+                    onPressed: _toggleFavorite,
                     child: Icon(
                       isFavorite
                         ? Icons.favorite

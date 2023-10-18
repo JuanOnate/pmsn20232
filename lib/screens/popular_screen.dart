@@ -22,22 +22,34 @@ class _PopularScreenState extends State<PopularScreen> {
     apiPopular = ApiPopular();
   }
 
+  void _toggleFavoritesOnly(){
+    setState(() {
+      showFavoritesOnly = !showFavoritesOnly;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Popular Movies'),
-        // actions: [
-        //   IconButton(
-        //     onPressed: , 
-        //     icon: const Icon(Icons.favorite_border_outlined)
-        //   )
-        // ],
+         actions: [
+           IconButton(
+             onPressed: _toggleFavoritesOnly, 
+             icon: showFavoritesOnly
+              ? const Icon(Icons.favorite)
+              : const Icon(Icons.favorite_border_outlined)
+            )
+          ],
         ),
       body: FutureBuilder(
         future: apiPopular!.getAllPopular(), 
         builder: (context, AsyncSnapshot<List<PopularModel>?> snapshot){
           if(snapshot.hasData){
+            final moviesToShow = showFavoritesOnly
+              ? snapshot.data!.where((movie) => movie.isFavorite).toList()
+              :snapshot.data!;
+
             return GridView.builder(
               padding: const EdgeInsets.all(10),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -46,21 +58,21 @@ class _PopularScreenState extends State<PopularScreen> {
                 mainAxisSpacing: 10,
                 childAspectRatio: .9
               ),
-              itemCount: snapshot.data!.length,
+              itemCount: moviesToShow.length,
               itemBuilder: (context, index){
                 return GestureDetector(
                   onTap: (){
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) =>
-                          MovieDetailScreen(movie: snapshot.data![index]),
+                          MovieDetailScreen(movie: moviesToShow[index]),
                       ),
                     );
                   },
                   
                   child: Hero(
-                    tag: 'moviePoster_${snapshot.data![index].id}',
-                    child: itemMovieWidget(snapshot.data![index]),
+                    tag: 'moviePoster_${moviesToShow[index].id}',
+                    child: itemMovieWidget(moviesToShow[index]),
                   )
                 );
               },
