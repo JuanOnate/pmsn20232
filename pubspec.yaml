@@ -7,6 +7,8 @@ environment:
   sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
+  flutter_rating_stars: ^1.0.3+4
+  youtube_player_flutter: ^8.1.2
   http: ^1.1.0
   path_provider: ^2.1.1
   sqflite: ^2.3.0

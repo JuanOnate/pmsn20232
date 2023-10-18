@@ -39,7 +39,7 @@ class PopularModel {
       voteAverage: (map['vote_average'] is int)
       ? (map['vote_average'] as int).toDouble()
       : map['vote_average'],
-      voteCount: map['vote_count']
+      voteCount: map['vote_count'],
     );
   }
 }
