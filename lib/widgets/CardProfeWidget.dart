@@ -103,8 +103,26 @@ class _CardProfeWidgetState extends State<CardProfeWidget> {
                           TextButton(
                             onPressed: () {
                               widget.agendaDB!.DELETE4('tblProfesor', 'idProfe', widget.profeModel.idProfe!).then((value) {
-                                Navigator.pop(context);
-                                GlobalValues.flagPR4Profe.value = !GlobalValues.flagPR4Profe.value;
+                                if(value == 0){
+                                  Navigator.pop(context);
+                                  showDialog(
+                                    context: context, 
+                                    builder: (context){
+                                      return AlertDialog(
+                                        title: Text('Alerta'),
+                                        content: Text('No se puede eliminar el profesor porque una tarea lo tiene asignado.'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context), 
+                                            child: Text('Entendido')
+                                          ),
+                                        ],
+                                      );
+                                    });
+                                }else{
+                                  Navigator.pop(context);
+                                  GlobalValues.flagPR4Profe.value = !GlobalValues.flagPR4Profe.value;
+                                }                              
                               });
                             },
                             child: Text('Si'),

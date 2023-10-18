@@ -127,18 +127,40 @@ class AgendaDB {
 
   Future<int> DELETE4(String tblName, String whereCampo, int id) async{
     var conexion = await database;
-    bool hasProfessors = await _hasProfessorsForCarrera(id);
-    if(hasProfessors){
-      return 0;
+    switch (tblName){
+      case 'tblCarrera':
+        bool hasProfessors = await _hasProfeForCarrera(id);
+        if(hasProfessors){
+          return 0;
+        }else{
+          return conexion!.delete(tblName, where: '$whereCampo = ?', whereArgs: [id]);
+        }
+      case 'tblProfesor':
+        bool hasProfessors = await _hasTaskForProfe(id);
+        if(hasProfessors){
+          return 0;
+        }else{
+          return conexion!.delete(tblName, where: '$whereCampo = ?', whereArgs: [id]);
+        }
+      case 'tblTask':
+        return conexion!.delete(tblName, where: '$whereCampo = ?', whereArgs: [id]);
     }
     return conexion!.delete(tblName, where: '$whereCampo = ?', whereArgs: [id]);
   }
 
-  Future<bool> _hasProfessorsForCarrera(int idCarrera) async {
+  Future<bool> _hasProfeForCarrera(int idCarrera) async {
     var conexion = await database;
     var result = await conexion!.query('tblProfesor',
         where: 'idCarrera = ?',
         whereArgs: [idCarrera]);
+    return result.isNotEmpty;
+  }
+
+  Future<bool> _hasTaskForProfe(int idProfe) async {
+    var conexion = await database;
+    var result = await conexion!.query('tblTask',
+        where: 'idProfe = ?',
+        whereArgs: [idProfe]);
     return result.isNotEmpty;
   }
 

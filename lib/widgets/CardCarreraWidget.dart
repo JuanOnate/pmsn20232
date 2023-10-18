@@ -56,8 +56,26 @@ class CardCarreraWidget extends StatelessWidget {
                           TextButton(
                             onPressed: (){
                               agendaDB!.DELETE4('tblCarrera', 'idCarrera',carreraModel.idCarrera!).then((value){
-                                Navigator.pop(context);
-                                GlobalValues.flagPR4Carrera.value = !GlobalValues.flagPR4Carrera.value;
+                                if(value == 0){
+                                  Navigator.pop(context);
+                                  showDialog(
+                                    context: context, 
+                                    builder: (context){
+                                      return AlertDialog(
+                                        title: Text('Alerta'),
+                                        content: Text('No se puede eliminar la carrera porque un profesor la tiene asginada.'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context), 
+                                            child: Text('Entendido')
+                                          ),
+                                        ],
+                                      );
+                                    });
+                                }else{
+                                  Navigator.pop(context);
+                                  GlobalValues.flagPR4Carrera.value = !GlobalValues.flagPR4Carrera.value;
+                                }
                               });
                             }, 
                             child: Text('Si')
