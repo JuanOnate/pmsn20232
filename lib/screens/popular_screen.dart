@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pmsn20232/models/popular_model.dart';
 import 'package:pmsn20232/network/api_popular.dart';
+import 'package:pmsn20232/screens/movie_detail_screen.dart';
 import 'package:pmsn20232/widgets/item_movie_widget.dart';
 
 class PopularScreen extends StatefulWidget {
@@ -38,7 +39,21 @@ class _PopularScreenState extends State<PopularScreen> {
               ),
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index){
-                return itemMovieWidget(snapshot.data![index]);
+                return GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                          MovieDetailScreen(movie: snapshot.data![index]),
+                      ),
+                    );
+                  },
+                  
+                  child: Hero(
+                    tag: 'moviePoster_${snapshot.data![index].id}',
+                    child: itemMovieWidget(snapshot.data![index]),
+                  )
+                );
               },
             );
           }else{
