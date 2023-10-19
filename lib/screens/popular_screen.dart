@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pmsn20232/database/agenda_db.dart';
 import 'package:pmsn20232/models/popular_model.dart';
 import 'package:pmsn20232/network/api_popular.dart';
 import 'package:pmsn20232/screens/movie_detail_screen.dart';
@@ -15,11 +16,21 @@ class _PopularScreenState extends State<PopularScreen> {
 
   ApiPopular? apiPopular;
   bool showFavoritesOnly = false;
+  List<PopularModel> favoriteMovies = [];
 
   @override
   void initState(){
     super.initState();
     apiPopular = ApiPopular();
+
+    final db = AgendaDB();
+    db.getFavoriteMovies().then((favoriteMoviesList) {
+      if(showFavoritesOnly){
+        favoriteMovies = favoriteMoviesList;
+        print('La siguiente lista se imprime de popular_screen');
+        print(favoriteMovies);
+      }
+    });
   }
 
   void _toggleFavoritesOnly(){
@@ -48,8 +59,7 @@ class _PopularScreenState extends State<PopularScreen> {
           if(snapshot.hasData){
             final moviesToShow = showFavoritesOnly
               ? snapshot.data!.where((movie) => movie.isFavorite).toList()
-              :snapshot.data!;
-
+              : snapshot.data!;
             return GridView.builder(
               padding: const EdgeInsets.all(10),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -60,20 +70,20 @@ class _PopularScreenState extends State<PopularScreen> {
               ),
               itemCount: moviesToShow.length,
               itemBuilder: (context, index){
+                final movie = moviesToShow[index];
                 return GestureDetector(
                   onTap: (){
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) =>
-                          MovieDetailScreen(movie: moviesToShow[index]),
+                          MovieDetailScreen(movie: movie, favoriteMovies: favoriteMovies),
                       ),
                     );
                   },
-                  
                   child: Hero(
-                    tag: 'moviePoster_${moviesToShow[index].id}',
-                    child: itemMovieWidget(moviesToShow[index]),
-                  )
+                    tag: 'moviePoster_${movie.id}',
+                    child: itemMovieWidget(movie.posterPath!),
+                  ),
                 );
               },
             );

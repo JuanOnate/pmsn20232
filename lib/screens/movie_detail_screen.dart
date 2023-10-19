@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:pmsn20232/database/agenda_db.dart';
 import 'package:pmsn20232/models/popular_model.dart';
 import 'package:pmsn20232/network/api_cast.dart';
 import 'package:pmsn20232/network/api_trailer.dart';
@@ -11,8 +12,9 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class MovieDetailScreen extends StatefulWidget {
 
   final PopularModel movie;
+  final List<PopularModel> favoriteMovies;
 
-  MovieDetailScreen({required this.movie});
+  MovieDetailScreen({required this.movie, required this.favoriteMovies});
 
   @override
   State<MovieDetailScreen> createState() => _MovieDetailScreenState();
@@ -28,8 +30,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     ApiTrailer().getTrailerVideoKey(widget.movie.id!).then((key){
       setState(() {
         trailerKey = key;
+        isFavorite = widget.movie.isFavorite;
       });
-      isFavorite = widget.movie.isFavorite;
     });
 
     ApiCast().getCast(widget.movie.id!).then((actors) {
@@ -44,6 +46,50 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       isFavorite = !isFavorite;
       widget.movie.isFavorite = isFavorite;
       //agregar codigo para guardar en la bd
+      final db = AgendaDB();
+      if (isFavorite) {
+      // Verifica si la película ya existe en la base de datos
+      db.getFavoriteMovies().then((existingMovie) {
+
+        bool movieExist = existingMovie.any((movie) => movie.id == widget.movie.id);
+
+        if (!movieExist) {
+          // La película no existe en la base de datos, realiza una inserción
+          print('La siguiente pelicula se marco como favorita por lo que se guardará en la bd');
+          db.insertFavoriteMovie(widget.movie).then((_) {
+            db.getFavoriteMovies().then((favoriteMoviesList) {
+              setState(() {
+                widget.favoriteMovies.clear();
+                widget.favoriteMovies.addAll(favoriteMoviesList);
+              });
+            });
+          });
+          print(widget.movie.id);
+          print(widget.movie.originalLanguage);
+          print(widget.movie.originalTitle);
+          print(widget.movie.overview);
+          print(widget.movie.popularity);
+          print(widget.movie.posterPath);
+          print(widget.movie.releaseDate);
+          print(widget.movie.title);
+          print(widget.movie.voteAverage);
+          print(widget.movie.voteCount);
+        } else {
+          // La película ya existe en la base de datos, puedes optar por actualizarla
+          // Aquí puedes implementar la lógica de actualización si es necesario.
+        }
+      });
+    } else {
+        // Si se desmarca como favorita, elimina la película de la base de datos
+        db.deleteFavoriteMovie(widget.movie.id!).then((_) {
+          db.getFavoriteMovies().then((favoriteMoviesList) {
+            setState(() {
+              widget.favoriteMovies.clear();
+              widget.favoriteMovies.addAll(favoriteMoviesList);
+            });
+          });
+        });
+      }
     });
   }
 
