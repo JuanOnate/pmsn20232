@@ -75,8 +75,6 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           print(widget.movie.voteAverage);
           print(widget.movie.voteCount);
         } else {
-          // La película ya existe en la base de datos, puedes optar por actualizarla
-          // Aquí puedes implementar la lógica de actualización si es necesario.
         }
       });
     } else {
