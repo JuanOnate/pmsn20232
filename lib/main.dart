@@ -77,6 +77,7 @@ import 'package:pmsn20232/assets/global_values.dart';
 import 'package:pmsn20232/assets/styles_app.dart';
 import 'package:pmsn20232/routes.dart';
 import 'package:pmsn20232/screens/login_screen.dart';
+import 'package:pmsn20232/screens/maps_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -89,7 +90,7 @@ class MyApp extends StatelessWidget{
       valueListenable: GlobalValues.flagTheme,
       builder: (context, value, _) {
         return MaterialApp(
-          home: const LoginScreen(),
+          home: const MapsScreen(),//home: const LoginScreen(),
           routes: getRoutes(),
           //theme: ThemeData.dark(),
           theme: value 
